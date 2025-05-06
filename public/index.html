@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Flipdot UI</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Libraries -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script> <!--This line is loading the p5.js library from a CDN (Content Delivery Network), specifically:-->
+  <script src="libs/p5.min.js"></script>  <!-- This is a local version of the above p5.js CDN library -->
+
+  <!-- Core scripts -->
+  <script src="js/controls.js"></script>
+  <script src="js/sketch.js" defer></script>
+</head>
+
+<body>
+  <!-- Top UI: Dropdown and Load Button -->
+  <div id="ui" style="text-align:center; margin-bottom: 10px;">
+    <select id="animSelector"></select>
+    <button id="loadButton">Load</button>
+  </div>
+
+  <!-- Canvas placeholder -->
+  <div id="canvas-holder" style="text-align: center; margin: 0 auto;"></div>
+
+  <!-- Dynamic controls will appear here -->
+  <div id="controls" style="margin: 20px auto 0; text-align: center;"></div>
+
+  <script>
+    // Populate dropdown with animation names
+    window.addEventListener('DOMContentLoaded', () => {
+      fetch('/animations')
+        .then(res => res.json())
+        .then(anims => {
+          const selector = document.getElementById('animSelector');
+          selector.innerHTML = '';
+
+          anims.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            selector.appendChild(opt);
+          });
+
+          // Trigger change event to load the first animation by default
+          selector.dispatchEvent(new Event('change'));
+        })
+        .catch(err => {
+          console.error('❌ Failed to load animation list:', err);
+        });
+    });
+  </script>
+</body>
+</html>
